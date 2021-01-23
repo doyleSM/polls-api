@@ -29,4 +29,34 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissinParamError('email'));
   });
+
+  test('should return 400 if no password is provided', () => {
+    const sut = new SignUpController();
+    const httpRequest = {
+      body: {
+        name: 'any',
+        email: 'any@mail.com',
+        passwordConfirmation: 'secret',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new MissinParamError('password'));
+  });
+
+  test('should return 400 if no passwordConfirmation is provided', () => {
+    const sut = new SignUpController();
+    const httpRequest = {
+      body: {
+        name: 'any',
+        email: 'any@mail.com',
+        password: 'secret',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(
+      new MissinParamError('passwordConfirmation')
+    );
+  });
 });
