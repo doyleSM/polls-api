@@ -1,10 +1,8 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SignUpController } from './signup';
-import { MissinParamError } from '../errors/missing-params-error';
-import { InvalidParamError } from '../errors/invalid-params-error';
+import { MissinParamError, InvalidParamError, ServerError } from '../errors';
 import { EmailValidator } from '../protocols/email-validator';
-import { ServerError } from '../errors/server-error';
 
 interface SutTypes {
   sut: SignUpController;
