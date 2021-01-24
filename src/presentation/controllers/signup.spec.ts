@@ -1,7 +1,10 @@
+/* eslint-disable max-classes-per-file */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { SignUpController } from './signup';
 import { MissinParamError } from '../errors/missing-params-error';
 import { InvalidParamError } from '../errors/invalid-params-error';
 import { EmailValidator } from '../protocols/email-validator';
+import { ServerError } from '../errors/server-error';
 
 interface SutTypes {
   sut: SignUpController;
@@ -110,5 +113,26 @@ describe('SignUp Controller', () => {
     };
     sut.handle(httpRequest);
     expect(isValidSpy).toHaveBeenCalledWith('any@mail.com');
+  });
+
+  test('should return 500 if email validator throws', () => {
+    class EmailValidatorStub implements EmailValidator {
+      isValid(email: string): boolean {
+        throw new Error();
+      }
+    }
+    const emailValidatorStub = new EmailValidatorStub();
+    const sut = new SignUpController(emailValidatorStub);
+    const httpRequest = {
+      body: {
+        name: 'any',
+        email: 'invalid@mail.com',
+        password: 'secret',
+        passwordConfirmation: 'secret',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError());
   });
 });
