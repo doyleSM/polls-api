@@ -5,8 +5,12 @@
   "author": "Gabriel Doyle Balk <gdoyle.dev@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "test:staged": "jest --passWithNoTests"
+    "test": "jest --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --runInBand",
+    "test:unit": "yarn test --watch -c jest-unit-config.ts",
+    "test:integration": "yarn test --watch -c jest-integration-config.ts",
+    "test:staged": "yarn test --",
+    "test:ci": "yarn test --coverage"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
